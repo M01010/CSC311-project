@@ -27,7 +27,7 @@ class TestPerf:
                         res = alg(text, p)
                         if res != p_location:
                             # for early finds
-                            print(f'error {res} {p_location} {i}')
+                            print(f'error {alg.__name__} {res} {p_location} {i}')
                     end = time.perf_counter_ns()
                     avg = (end - start) / n
 

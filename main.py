@@ -3,7 +3,7 @@ from test_perf import TestPerf
 
 
 def main():
-    results = TestPerf.test_algorithms([bruteforce])
+    results = TestPerf.test_algorithms([bruteforce, kmp, boyer_moore])
     TestPerf.write_output(results)
 
 
