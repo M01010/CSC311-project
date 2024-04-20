@@ -12,26 +12,21 @@ class TestPerf:
         return mid, text[mid:mid + p_length + 1]
 
     @staticmethod
-    def test_algorithms(algorithms, n=5):
+    def test_algorithms(algorithms, trials=5):
         results = []
-        for alg in algorithms:
-            for i in range(START, END, STEP):
-                filename = f'{TEXT_PATH}/{i}.txt'
-                with open(filename, 'r') as f:
-                    text = f.read()
-                for p_length in range(2, P_MAX_LENGTH):
-                    p_location, p = TestPerf.get_pattern(text, i, p_length)
-
-                    start = time.perf_counter_ns()
-                    for _ in range(n):
-                        res = alg(text, p)
-                        if res != p_location:
+        for n in range(START, END, STEP):
+            filename = f'{TEXT_PATH}/{n}.txt'
+            with open(filename, 'r') as f:
+                text = f.read()
+            for p_length in range(2, P_MAX_LENGTH):
+                p_location, p = TestPerf.get_pattern(text, n, p_length)
+                for _ in range(trials):
+                    for alg in algorithms:
+                        time_ns, res = TestPerf.calc_time(alg, text, p)
+                        results.append((alg.__name__, n, p_length, time_ns))
+                        # if res != p_location:
                             # for early finds
-                            print(f'error {alg.__name__} {res} {p_location} {i}')
-                    end = time.perf_counter_ns()
-                    avg = (end - start) / n
-
-                    results.append((alg.__name__, i, p_length, avg))
+                            # print(f'error {alg.__name__} {res} {p_location} {n}')
         return results
 
     @staticmethod
@@ -40,3 +35,11 @@ class TestPerf:
             writer = csv.writer(f)
             writer.writerow(('algorithm', 'string_length', 'pattern_length', 'avg_time_ns'))
             writer.writerows(results)
+
+    @staticmethod
+    def calc_time(alg, text, p):
+        start = time.perf_counter_ns()
+        res = alg(text, p)
+        end = time.perf_counter_ns()
+        time_ns = end - start
+        return time_ns, res
