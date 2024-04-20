@@ -12,7 +12,7 @@ class TestPerf:
         return mid, text[mid:mid + p_length + 1]
 
     @staticmethod
-    def test_algorithms(algorithms, trials=5):
+    def test_algorithms(algorithms, trials=20):
         results = []
         for n in range(START, END, STEP):
             filename = f'{TEXT_PATH}/{n}.txt'
