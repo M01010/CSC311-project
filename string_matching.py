@@ -31,27 +31,24 @@ def boyer_moore(text, p):
             j += 1
         if j == m:
             return i - m + 1
-        else:
-            shift = bad_chars.get(text[i + j], m)
-            if shift == 0:
-                shift = m - 1
-            skips = shift - j
 
-            if skips <= 0:
-                i += 1
-            else:
-                i += skips
+        shift = bad_chars.get(text[i + j], m)
+        if shift == 0:
+            shift = m - 1
+        skips = shift - j
+
+        i += max(1, skips)
     return -1
 
 
-def compute_prefix(pattern):
-    m = len(pattern)
+def compute_prefix(p):
+    m = len(p)
     prefix = [0] * m
     length = 0
     i = 1
 
     while i < m:
-        if pattern[i] == pattern[length]:
+        if p[i] == p[length]:
             length += 1
             prefix[i] = length
             i += 1
